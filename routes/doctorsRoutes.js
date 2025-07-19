@@ -12,9 +12,9 @@ router.get('/doctors', getDoctors);
 router.get('/doctors/:id', getDoctorById);
 
 // Update doctor
-router.put('doctors/:id', updateDoctor);
+router.put('/doctors/:id', updateDoctor);
 
 // Delete doctor
-router.delete('doctors/:id', deleteDoctor);
+router.delete('/doctors/:id', deleteDoctor);
 
 module.exports = router;
