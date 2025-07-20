@@ -5,6 +5,7 @@ const createDoctor = async (req, res) => {
   try {
     const {
       name,
+      email,
       specialization,
       availableSlots,
       experience,
@@ -14,10 +15,10 @@ const createDoctor = async (req, res) => {
     } = req.body;
 
     // Validation
-    if (!name || !specialization || !experience || !bio) {
+    if (!name || !email || !specialization || !experience || !bio) {
       return res.status(400).json({
         success: false,
-        message: 'Required fields missing: name, specialization, experience, and bio are required'
+        message: 'Required fields missing: name, email, specialization, experience, and bio are required'
       });
     }
 
@@ -26,6 +27,15 @@ const createDoctor = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Name must be between 2 and 100 characters'
+      });
+    }
+
+    // Validate email format
+    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid email address'
       });
     }
 
@@ -62,6 +72,18 @@ const createDoctor = async (req, res) => {
       });
     }
 
+    // Check if doctor with same email already exists
+    const existingDoctorByEmail = await Doctor.findOne({
+      email: email.toLowerCase().trim()
+    });
+
+    if (existingDoctorByEmail) {
+      return res.status(409).json({
+        success: false,
+        message: 'A doctor with this email address already exists'
+      });
+    }
+
     // Check if doctor with same name and specialization already exists
     const existingDoctor = await Doctor.findOne({
       name: name.trim(),
@@ -77,6 +99,7 @@ const createDoctor = async (req, res) => {
 
     const newDoctor = new Doctor({
       name: name.trim(),
+      email: email.toLowerCase().trim(),
       specialization: specialization.trim(),
       availableSlots,
       experience: experience.trim(),

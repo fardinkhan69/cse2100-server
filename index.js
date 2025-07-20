@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const appointmentsRoutes = require('./routes/appointmentRoutes');
 const doctorRoutes = require('./routes/doctorsRoutes');
+const prescriptionRoutes = require('./routes/prescriptionRoutes');
 
 const connectDB = require('./config/db');
 
@@ -22,6 +23,7 @@ app.get('/',(_req,res) =>  {
 
 app.use('/',appointmentsRoutes);
 app.use('/',doctorRoutes);
+app.use('/',prescriptionRoutes);
 
 // Connect to database and start server
 app.listen(port,()=>{

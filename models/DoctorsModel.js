@@ -6,6 +6,18 @@ const doctorSchema = new mongoose.Schema({
     required: true,
     maxlength: 100
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    validate: {
+      validator: function(email) {
+        return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
+      },
+      message: 'Please enter a valid email address'
+    }
+  },
   specialization: {
     type: String,
     required: true

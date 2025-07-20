@@ -70,27 +70,28 @@ const getAppointments = async (req, res) => {
 const updateAppointments = async (req, res) => {
     try {
         const { id } = req.params;
-        const { doctorId, patientName, userEmail, problemDescription, appointmentDate, appointmentTime } = req.body;
+        const updateData = req.body;
+
+        // Remove undefined fields to allow partial updates
+        Object.keys(updateData).forEach(key => {
+            if (updateData[key] === undefined) {
+                delete updateData[key];
+            }
+        });
 
         const updatedAppointment = await Appointment.findByIdAndUpdate(
             id,
-            {
-                doctorId,
-                patientName,
-                userEmail,
-                problemDescription,
-                appointmentDate,
-                appointmentTime
-            },
+            updateData,
             { new: true }
         );
+
         if (!updatedAppointment) {
             return res.status(404).json({
                 success: false,
                 message: "Appointment not found"
             });
         }
-        
+
         res.status(200).json({
             success: true,
             data: updatedAppointment
