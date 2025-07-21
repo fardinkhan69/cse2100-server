@@ -22,6 +22,11 @@ app.get('/', (_req, res) => {
     res.send('Hello World!');
 })
 
+// Test route to check if server is working
+app.get('/test', (_req, res) => {
+    res.json({ message: 'Server is working!', timestamp: new Date().toISOString() });
+})
+
 app.use('/', appointmentsRoutes);
 app.use('/', doctorRoutes);
 app.use('/', prescriptionRoutes);
