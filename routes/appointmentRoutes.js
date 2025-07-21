@@ -1,15 +1,16 @@
 const express = require('express')
-const { getAppointments, updateAppointments, createAppointments, deleteAppointments } = require('../controllers/appointmentController')
+const { getAppointments, updateAppointments, createAppointments, deleteAppointments } = require('../controllers/appointmentController');
+const verifyToken = require('../middlewares/verifytoken.middleware');
 const router = express.Router()
 
 
-router.get('/appointments',getAppointments);
+router.get('/appointments',verifyToken,getAppointments);
 
-router.post('/appointments',createAppointments);
+router.post('/appointments',verifyToken,createAppointments);
 
-router.put('/appointments/:id',updateAppointments);
+router.put('/appointments/:id',verifyToken,updateAppointments);
 
-router.delete('/appointments/:id',deleteAppointments);
+router.delete('/appointments/:id',verifyToken,deleteAppointments);
 
 
 

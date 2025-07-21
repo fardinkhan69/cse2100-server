@@ -254,10 +254,38 @@ const deleteDoctor = async (req, res) => {
   }
 };
 
+// CHECK if user is admin (doctor)
+const checkAdminStatus = async (req, res) => {
+  try {
+    const { email } = req.params;
+    
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email parameter is required'
+      });
+    }
+
+    const doctor = await Doctor.findOne({ email: email.toLowerCase() });
+    
+    res.status(200).json({
+      success: true,
+      isAdmin: !!doctor,
+      data: doctor ? { name: doctor.name, email: doctor.email } : null
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+};
+
 module.exports = {
   createDoctor,
   getDoctors,
   getDoctorById,
   updateDoctor,
-  deleteDoctor
+  deleteDoctor,
+  checkAdminStatus
 };
